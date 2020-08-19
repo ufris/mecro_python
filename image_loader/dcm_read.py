@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pydicom, cv2
 import numpy as np
-import png
+import png              # pip install pypng
 
 print(__doc__)
 
