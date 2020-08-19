@@ -1,9 +1,12 @@
 import matplotlib.pyplot as plt
-import pydicom
+import pydicom, cv2
+import numpy as np
+import png
 
 print(__doc__)
 
-filename = '/media/j/새 볼륨1/dataset/Brain_hemorrhage/cq500/CQ500CT0 CQ500CT0/Unknown Study/CT Plain/CT000001.dcm'
+for_save = True
+filename = '/media/j/1.3.51.5146.1805.20050518.1031403.1.1.0.dcm'
 
 dataset = pydicom.dcmread(filename)
 
@@ -33,5 +36,21 @@ print("Slice location...:", dataset.get('SliceLocation', "(missing)"))
 
 # plot the image using matplotlib
 print(dataset.pixel_array)
-plt.imshow(dataset.pixel_array, cmap=plt.cm.bone)
-plt.show()
+
+
+if for_save:
+    ds = dataset
+    shape = ds.pixel_array.shape
+    image_2d = ds.pixel_array.astype(float)
+    image_2d_scaled = (np.maximum(image_2d,0) / image_2d.max()) * 255.0
+
+    # Convert to uint
+    image_2d_scaled = np.uint8(image_2d_scaled)
+
+    # Write the PNG file
+    with open('/media/j/DATA/ckpt/AS/2020_08_18_copy/1.png', 'wb') as png_file:
+        w = png.Writer(shape[1], shape[0], greyscale=True)
+        w.write(png_file, image_2d_scaled)
+else:
+    plt.imshow(dataset.pixel_array, cmap=plt.cm.bone)
+    plt.show()
