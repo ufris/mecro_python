@@ -4,14 +4,19 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 
-source_folder = '/media/crescom/새 볼륨/data/my_work/eyes/image'
-json_path = "/media/crescom/새 볼륨/data/my_work/eyes/oct_test.json"  # Relative to root directory
-save_path = '/media/crescom/새 볼륨/data/my_work/eyes/eyes_trainval'
+source_folder = '/media/새 볼륨/data/my_work/eyes/image'
+json_path = "/media/새 볼륨/data/my_work/eyes/oct_test.json"  # Relative to root directory
+save_path = '/media/새 볼륨/data/my_work/eyes/eyes_trainval'
 count = 0  # Count of total images saved
 file_bbs = {}  # Dictionary containing polygon coordinates for mask
 
 line = False
 set_name = 'test'
+imshow = False
+
+# This code run if one image have 9 polyline. you can change end_num according to the number of ploylines.
+end_num = 9
+
 
 def image_mask_add(add_img, original_img):
     # y_predict_resize *= 255
@@ -105,7 +110,6 @@ for itr in file_bbs:
 
     count += 1
 
-    end_num = 9
     if int(itr[-1]) == end_num:
         # image_mask_add(mask,img)
 
@@ -118,8 +122,9 @@ for itr in file_bbs:
             print('path', os.path.join(save_path + '/' + set_name + '/' + 'label', itr + ".png"))
             cv2.imwrite(os.path.join(save_img_path, itr.replace("*9", "") + ".png"), img)
             cv2.imwrite(os.path.join(save_label_path, itr.replace("*9", "") + ".png"), mask)
-        # plt.imshow(mask)
-        # plt.show()
+        if imshow:
+            plt.imshow(mask)
+            plt.show()
         mask = np.zeros((img.shape[0], img.shape[1]))
     elif int(itr[-1]) == 1:
         mask = np.zeros((img.shape[0], img.shape[1]))
