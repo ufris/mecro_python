@@ -8,7 +8,12 @@ print(__doc__)
 for_save = True
 filename = '/media/j/1.3.51.5146.1805.20050518.1031403.1.1.0.dcm'
 
-dataset = pydicom.dcmread(filename)
+try:
+    dataset = pydicom.dcmread(filename)
+except:
+    # if Error : File is missing DICOM File Meta Information header or the 'DICM' prefix is missing from the header. Use force=True to force reading.
+    ds = pydicom.read_file(filename, force=True)
+    ds.file_meta.TransferSyntaxUID = pydicom.uid.ImplicitVRLittleEndian    
 
 # Normal mode:
 print()
